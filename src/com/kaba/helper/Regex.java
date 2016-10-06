@@ -89,6 +89,118 @@ public class Regex {
         return postFix;
     }
 
+
+    private static final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))"; //Reference: http://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
+
+    /**
+     * Similar to static Queue<Character> infixToPostfix(String input) but returns a Queue of Strings not characters
+     * Convert and return equivalent postfix expression of input: Note that this method does some validity checks on the string
+     * It ensures that the expression follows some basic algebraic conventions such as no two operators can follow
+     * themselves except + and - and when they do, it resolves the conflict by assigning a "-" to different operators and
+     * a "+" to the same operators
+     * Uses Regular Expressions to split input string into tokens delineated by any of the operators: +, -, *, /, (, )
+     */
+    public static Queue<String> infixToPostfixString(String input) throws IllegalArgumentException, ArrayIndexOutOfBoundsException {
+        Stack<String> stack = new Stack<>();
+        Queue<String> postFix = new LinkedList<>();
+        input = input.replaceAll("\\s", "");
+        String[] tokens = input.split(String.format(WITH_DELIMITER, "[=|\\+|\\*|\\-|/|)|(]+")); //Reference: http://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
+        String token;
+        int opCount = 1;
+        for(int i = 0; i < tokens.length; i++) {
+            token = tokens[i];
+            if(isOperator(token)){
+                opCount++;
+                if(opCount > 2){
+                    throw new IllegalArgumentException("The expression is not properly formatted.");
+                }
+                if(isOperator(tokens[i + 1]) && ((tokens[i + 1].equals("*") || tokens[i + 1].equals("/")) && (token.equals("*") || token.equals("/")))){
+                    throw new IllegalArgumentException("The expression is not properly formatted.");
+                }
+                else if(isOperator(tokens[i + 1]) && ((tokens[i + 1].equals("*") || tokens[i + 1].equals("/")) && (token.equals("+") || token.equals("-")))){
+                    throw new IllegalArgumentException("The expression is not properly formatted.");
+                }
+                else if(isOperator(tokens[i + 1]) && ((tokens[i + 1].equals("+") || tokens[i + 1].equals("-")) && (token.equals("*") || token.equals("/")))){
+                    tokens[i + 2] = tokens[i + 1] + tokens[i + 2];
+                    i++;
+                }
+                if(isOperator(tokens[i + 1])){
+                    if(!token.equals(tokens[i + 1])){
+                        token = "-";
+                    } else {
+                        token = "+";
+                    }
+                    i++;
+                }
+                while(!stack.isEmpty() && precedence(token) < precedence(stack.peek())){
+                    postFix.add(stack.pop());
+                }
+                stack.push(token);
+            }
+
+            else if(token.equals("(")){
+                opCount = 1;
+                if(isOperator(tokens[i + 1]) && (tokens[i + 1].equals("*") || tokens[i + 1].equals("/"))){
+                    throw new IllegalArgumentException("The expression is not properly formatted.");
+                }
+                stack.push(token);
+            }
+            else if(token.equals(")")){
+                opCount = 1;
+                if(isOperator(tokens[i - 1])){
+                    throw new IllegalArgumentException("The expression is not properly formatted.");
+                }
+                try {
+                    while (!stack.peek().equals("(")) {
+                        postFix.add(stack.pop());
+                    }
+                    stack.pop();
+                } catch (EmptyStackException e){
+                    throw new IllegalArgumentException("You entered an invalid expression: Missing braces");
+                }
+            } else {
+                opCount = 1;
+                postFix.add(token);
+            }
+        }
+        while(!stack.empty()) {
+            if(stack.peek().equals(")") || stack.peek().equals("(")) {
+                throw new IllegalArgumentException("You entered an invalid expression: Missing braces");
+            }
+            postFix.add(stack.pop());
+        }
+
+        return postFix;
+    }
+
+    /**
+     * Return true if String token is an operator: *, +, ?, ., |
+     */
+    public static boolean isOperator(String token) {
+        return token.equals("=") || token.equals("+") || token.equals("*") || token.equals("/") || token.equals("-");
+    }
+
+    /**
+     * Return the precedence level of char token
+     * Unary operators: *, +, ? have highest precedence followed by concatenation operator: . and finally alternation operator: |
+     */
+    private static int precedence(String token) {
+        switch (token) {
+            case "/":
+                return 4;
+            case "*":
+                return 3;
+            case "+":
+                return 2;
+            case "-":
+                return 2;
+            case "=":
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
     /**
      * Return true of char token is a unary operator: *, +, ?
      */

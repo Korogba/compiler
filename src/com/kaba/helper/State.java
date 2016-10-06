@@ -17,7 +17,7 @@ public class State {
         transitions = new HashMap<>();
     }
 
-    char getLabel() {
+    public char getLabel() {
         return label;
     }
 

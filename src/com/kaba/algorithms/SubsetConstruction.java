@@ -39,17 +39,28 @@ public class SubsetConstruction {
         DFAState start = new DFAState('S', startEClosure);
         generatedDFA = new DFA(start);
         dfaStates.add(start);
+        System.out.print("Component States of " + start.getLabel() + ": ");
+        for(State componentState : start.getComponentStates()){
+            System.out.print(componentState.getLabel() + ", ");
+        }
+        System.out.print("\n");
+        int loopCount = 0;
         while (!dfaStates.isEmpty()) {
             DFAState current = dfaStates.remove();
             for (char input : Fragment.getInputSymbol()) {
-                List<State> dTran = new LinkedList<>();
+                LinkedList<State> dTran = new LinkedList<>();
                 DFAState newState;
                 for (State move : move(current.getComponentStates(), input)) {
-                    dTran.addAll(move.getEClosure());
+                    move.getEClosure().stream().filter(moveState -> !dTran.contains(moveState)).forEach(dTran::add);
                 }
                 if(!generatedDFA.exists(dTran)) {
                     newState = new DFAState(dTran);
                     generatedDFA.add(newState);
+                    System.out.print("Component States of " + newState.getLabel() + ": ");
+                    for(State componentState : dTran){
+                        System.out.print(componentState.getLabel() + ", ");
+                    }
+                    System.out.print("\n");
                     dfaStates.add(newState);
                     if(dTran.contains(NFA.getFinalState())){
                         generatedDFA.getFinalStates().add(newState);
@@ -58,6 +69,10 @@ public class SubsetConstruction {
                     newState = generatedDFA.getStateFromList(dTran);
                 }
                 current.updateTransitions(input, newState.getLabel());
+            }
+            loopCount++;
+            if(loopCount == 15){
+                break;
             }
         }
         return generatedDFA;
