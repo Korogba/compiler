@@ -34,7 +34,7 @@ public class Main {
                 //System.out.println(queue);
                 List<BinaryTree<String>> addressCodes = ThreeAddressCode.generateThreeAddressCode(regex);
                 for(BinaryTree<String> statement: addressCodes){
-                    System.out.println(ThreeAddressCode.threeAddressFromBinaryTree(statement));
+                    System.out.println(ThreeAddressCode.getTriples(statement));
                 }
                 break;
             } catch (IllegalArgumentException e) {

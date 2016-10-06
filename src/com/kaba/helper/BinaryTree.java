@@ -25,6 +25,11 @@ public class BinaryTree<T> {
         right = null;
     }
 
+    public BinaryTree(T element, BinaryTree<T> right) {
+        this.element = element;
+        this.right = right;
+    }
+
     public T getElement() {
         return element;
     }
@@ -35,6 +40,10 @@ public class BinaryTree<T> {
 
     public BinaryTree<T> getRight() {
         return right;
+    }
+
+    public boolean isLeafNode(){
+        return (left == null && right == null);
     }
 
     //Reference: http://stackoverflow.com/questions/2241513/java-printing-a-binary-tree-using-level-order-in-a-specific-format
