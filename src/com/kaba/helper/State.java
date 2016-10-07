@@ -17,7 +17,7 @@ public class State {
         transitions = new HashMap<>();
     }
 
-    public char getLabel() {
+    char getLabel() {
         return label;
     }
 
@@ -152,5 +152,11 @@ public class State {
         }
         statesTransition.addAll(this.getTransitions().get(input));
         return statesTransition;
+    }
+    /**
+     * Reset label after each NFA or DFA is generated!
+     */
+    public static void resetLabelCount(){
+        labelCount = 65;
     }
 }

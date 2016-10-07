@@ -16,7 +16,7 @@ public class Triples {
         this.argumentTwo = argumentTwo;
     }
 
-    public Triples(String argumentOne, String operator, int position) {
+/*    public Triples(String argumentOne, String operator, int position) {
         this.argumentOne = argumentOne;
         this.argumentTwo = "";
         this.operator = operator;
@@ -53,7 +53,7 @@ public class Triples {
 
     public void setArgumentTwo(String argumentTwo) {
         this.argumentTwo = argumentTwo;
-    }
+    }*/
 
     @Override
     public String toString() {

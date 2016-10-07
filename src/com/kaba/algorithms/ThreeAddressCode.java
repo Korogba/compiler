@@ -6,7 +6,6 @@ import com.kaba.helper.Regex;
 import com.kaba.helper.Triples;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -17,6 +16,7 @@ public class ThreeAddressCode {
     private static Stack<Quadruples> quadruples = new Stack<>();
     private static Stack<Triples> triples = new Stack<>();
     private static int labelCount = 0;
+    private static Stack<String> statements = new Stack<>();
 
     public static List<String> getThreeAddress(BinaryTree<String> statement) {
         threeAddressFromBinaryTree(statement);
@@ -31,6 +31,10 @@ public class ThreeAddressCode {
     public static Stack<Triples> getTriples(BinaryTree<String> statement) {
         triplesFromBinaryTree(statement);
         return triples;
+    }
+
+    public static Stack<String> getStatements() {
+        return statements;
     }
 
     /**
@@ -52,6 +56,7 @@ public class ThreeAddressCode {
         for(String statement: splitStatements) {
             Queue<String> tokens = Regex.infixToPostfixString(statement);
             addressCodes.add(postfixToBinaryTree(tokens));
+            ThreeAddressCode.statements.push(statement);
         }
         return addressCodes;
     }
@@ -155,7 +160,7 @@ public class ThreeAddressCode {
             }
             else {
                 String label = generateLabelNumber();
-                Quadruples current = new Quadruples(quadruplesFromBinaryTree(binaryTree.getLeft()), quadruplesFromBinaryTree(binaryTree.getRight()), binaryTree.getElement(), label);
+                Quadruples current = new Quadruples(quadruplesFromBinaryTree(binaryTree.getRight()), quadruplesFromBinaryTree(binaryTree.getLeft()), binaryTree.getElement(), label);
                 quadruples.push(current);
                 return label;
             }

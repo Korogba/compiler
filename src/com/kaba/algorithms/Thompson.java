@@ -2,6 +2,7 @@ package com.kaba.algorithms;
 
 import com.kaba.helper.Fragment;
 import com.kaba.helper.Regex;
+import com.kaba.helper.State;
 
 import java.util.*;
 
@@ -50,6 +51,7 @@ public class Thompson {
                 workingContainer.push(basic(token));
             }
         }
+        State.resetLabelCount();
         return workingContainer.pop();
     }
     /**

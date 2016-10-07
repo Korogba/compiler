@@ -39,11 +39,6 @@ public class SubsetConstruction {
         DFAState start = new DFAState('S', startEClosure);
         generatedDFA = new DFA(start);
         dfaStates.add(start);
-        System.out.print("Component States of " + start.getLabel() + ": ");
-        for(State componentState : start.getComponentStates()){
-            System.out.print(componentState.getLabel() + ", ");
-        }
-        System.out.print("\n");
         int loopCount = 0;
         while (!dfaStates.isEmpty()) {
             DFAState current = dfaStates.remove();
@@ -56,11 +51,6 @@ public class SubsetConstruction {
                 if(!generatedDFA.exists(dTran)) {
                     newState = new DFAState(dTran);
                     generatedDFA.add(newState);
-                    System.out.print("Component States of " + newState.getLabel() + ": ");
-                    for(State componentState : dTran){
-                        System.out.print(componentState.getLabel() + ", ");
-                    }
-                    System.out.print("\n");
                     dfaStates.add(newState);
                     if(dTran.contains(NFA.getFinalState())){
                         generatedDFA.getFinalStates().add(newState);
@@ -75,6 +65,7 @@ public class SubsetConstruction {
                 break;
             }
         }
+        State.resetLabelCount();
         return generatedDFA;
     }
 

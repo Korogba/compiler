@@ -23,7 +23,7 @@ public class Quadruples {
         this.operandTwo = "";
     }
 
-    public String getOperandOne() {
+/*    public String getOperandOne() {
         return operandOne;
     }
 
@@ -53,24 +53,15 @@ public class Quadruples {
 
     public void setResult(String result) {
         this.result = result;
-    }
+    }*/
 
     @Override
     public String toString() {
-        if(!operandTwo.equals("")) {
-            return result +
-                    " = " +
-                    operandOne + " " +
-                    operator +
-                    " " +
-                    operandTwo;
-        }
-        else {
-            return result +
-                    " " +
-                    operator +
-                     " " +
-                    operandOne;
-        }
+        return "Quadruples{" +
+                "operandOne='" + operandOne + '\'' +
+                ", operandTwo='" + operandTwo + '\'' +
+                ", operator='" + operator + '\'' +
+                ", result='" + result + '\'' +
+                '}';
     }
 }
