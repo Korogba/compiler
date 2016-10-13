@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.EmptyStackException;
 
 /**
  * Created by Yusuf on 10/11/2016
@@ -69,21 +70,14 @@ public abstract class GraphWindow extends JPanel {
         chartConstraints.gridheight = GridBagConstraints.RELATIVE;
         add(chartPanel, chartConstraints);
 
-        JPanel colorPanel = new JPanel(new GridLayout(2, 3));
-        setUpColorPanel(colorPanel);
+        GridColor gridColor = new GridColor();
         GridBagConstraints legendConstraint = new GridBagConstraints();
         legendConstraint.fill = GridBagConstraints.HORIZONTAL;
         legendConstraint.anchor = GridBagConstraints.PAGE_END;
         legendConstraint.gridx = 1;
         legendConstraint.gridy = 2;
-        add(colorPanel, legendConstraint);
-    }
-
-    private void setUpColorPanel(JPanel colorPanel) {
-        String[] colors = {"#EC7063", "#239B56", "#3498DB", "#7D3C98", "#B7950B", "#17202A"};
-        for(String color : colors) {
-            colorPanel.add(new ColorPanel(color));
-        }
+        legendConstraint.gridwidth = 1;
+        add(gridColor, legendConstraint);
     }
 
     JPanel getChartPanel() {
@@ -117,11 +111,10 @@ public abstract class GraphWindow extends JPanel {
                 DFA dfa = SubsetConstruction.subsetConstruction(NFA);
                 AutomataWindow.setUpNfaDfa(NFA, dfa);
                 AutomataWindow.setUpStrings(regex);
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(appWindow, e.getLocalizedMessage(), "Input Error!",JOptionPane.ERROR_MESSAGE);
                 System.out.println(e.getLocalizedMessage());
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException | EmptyStackException e) {
                 JOptionPane.showMessageDialog(appWindow, "The expression is not properly formatted!", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 System.out.println("The expression is not properly formatted.");
             }
@@ -131,8 +124,10 @@ public abstract class GraphWindow extends JPanel {
     private class ColorPanel extends JPanel {
         private String hexColor;
 
-        ColorPanel(String hexColor) {
+        ColorPanel(String hexColor, String label) {
+            setLayout(new FlowLayout());
             this.hexColor = hexColor;
+            add(new JLabel(label));
         }
 
         protected void paintComponent(Graphics g) {
@@ -140,6 +135,19 @@ public abstract class GraphWindow extends JPanel {
             g.drawRect(10,10,10,10);
             g.setColor(Color.decode(hexColor));
             g.fillRect(10,10,10,10);
+        }
+    }
+
+    private class GridColor extends JPanel {
+        private final String[] colors = {"#EC7063", "#239B56", "#3498DB", "#7D3C98", "#B7950B", "#17202A"};
+        private final String[] inputs = {"a", "b", "c", "d", "e", "ε"};
+
+        GridColor() {
+            setLayout(new GridLayout(2,3));
+            for(int i = 0; i < colors.length; i++){
+                ColorPanel colorPanel = new ColorPanel(colors[i], inputs[i]);
+                this.add(colorPanel);
+            }
         }
     }
 }

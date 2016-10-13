@@ -12,6 +12,7 @@ public class Fragment {
     private Set<State> states;
     private State startState;
     private State finalState;
+    private static char[] inputAlphabet;
 
     public Fragment(Character input) {
         //Create Start state
@@ -182,9 +183,15 @@ public class Fragment {
 
     /**
      * Returns the input alphabets accepted by the language
-     * TODO Make Dynamic!!!!
      */
     public static char[] getInputSymbol() {
-        return new char[]{'a', 'b'};
+        return inputAlphabet;
+    }
+
+    /**
+     * Returns the input alphabets accepted by the language
+     */
+    public static void setInputSymbol(char[] setAlphabet) {
+        inputAlphabet = setAlphabet;
     }
 }

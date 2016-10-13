@@ -1,6 +1,7 @@
 package com.kaba.ui;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,23 +10,20 @@ import java.awt.event.MouseEvent;
  * Created by Yusuf on 10/11/2016
  */
 public class CodeGenWindow extends JPanel {
-    private JTextArea textArea;
     private JButton generate;
     private JTextField inputExpression;
     private JButton reset;
     private JPanel centerPanel;
+    private JTable threeAddressCode;
+    private JTable quadruples;
+    private JTable triples;
     private boolean firstTimeClicked = true;
 
     public CodeGenWindow(AppWindow appWindow) {
-        super(new GridBagLayout());
+        super(new BorderLayout());
 
         inputExpression = new JTextField("Enter expression terminated by ';' - ");
-        GridBagConstraints inputConstraint = new GridBagConstraints();
-        inputConstraint.fill = GridBagConstraints.HORIZONTAL;
-        inputConstraint.gridx = 0;
-        inputConstraint.gridy = 0;
-        inputConstraint.weightx = 0.5;
-        add(inputExpression, inputConstraint);
+        add(inputExpression, BorderLayout.PAGE_END);
         inputExpression.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -37,44 +35,87 @@ public class CodeGenWindow extends JPanel {
         });
 
         generate = new JButton("Generate");
-        GridBagConstraints generateConstraints = new GridBagConstraints();
-        generateConstraints.fill = GridBagConstraints.HORIZONTAL;
-        generateConstraints.gridx = 1;
-        generateConstraints.gridy = 0;
-        generateConstraints.weightx = 0.5;
-        add(generate, generateConstraints);
+        add(generate, BorderLayout.PAGE_END);
 
         reset = new JButton("Reset");
-        GridBagConstraints resetConstraint = new GridBagConstraints();
-        resetConstraint.fill = GridBagConstraints.HORIZONTAL;
-        resetConstraint.gridx = 2;
-        resetConstraint.gridy = 0;
-        resetConstraint.weightx = 0.5;
-        add(reset, resetConstraint);
+        add(reset, BorderLayout.PAGE_END);
 
-        centerPanel = new JPanel(new GridLayout());
-        GridBagConstraints centerConstraints = new GridBagConstraints();
-        centerConstraints.fill = GridBagConstraints.BOTH;
-        centerConstraints.gridx = 0;
-        centerConstraints.gridy = 1;
-        centerConstraints.weightx = 0.5;
-        centerConstraints.weighty = 0.5;
-        centerConstraints.gridwidth = 3;
-        add(centerPanel, centerConstraints);
+        centerPanel = new JPanel(new GridBagLayout());
+        setUpCenterPanel();
+        add(centerPanel, BorderLayout.CENTER);
 
-        textArea = new JTextArea("Results: ", 3, 0);
-        textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setBackground(Color.LIGHT_GRAY);
-        GridBagConstraints textConstraints = new GridBagConstraints();
-        textConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textConstraints.gridx = 0;
-        textConstraints.gridy = 2;
-        textConstraints.weighty = 0;
-        textConstraints.weightx = 1;
-        textConstraints.gridwidth = 3;
-        add(textArea, textConstraints);
+    }
+
+    private void setUpCenterPanel() {
+        String[] threeAddressCodeTitle = {"#","Statement"};
+        String[] triplesTitle = {"#","Operator", "Argument One", "Argument Two"};
+        String[] quadruplesTitle = {"#","Operator", "Argument One", "Argument Two", "Result"};
+
+        threeAddressCode = new JTable(new MyTableModel(threeAddressCodeTitle));
+        GridBagConstraints codeConstraints = new GridBagConstraints();
+        codeConstraints.fill = GridBagConstraints.HORIZONTAL;
+        codeConstraints.gridx = 0;
+        codeConstraints.gridy = 0;
+        codeConstraints.weightx = 0.5;
+        codeConstraints.weighty = 0.5;
+        centerPanel.add(new JScrollPane(threeAddressCode), codeConstraints);
+
+        triples = new JTable(new MyTableModel(triplesTitle));
+        GridBagConstraints triplesConstraints = new GridBagConstraints();
+        triplesConstraints.fill = GridBagConstraints.HORIZONTAL;
+        triplesConstraints.gridx = 1;
+        triplesConstraints.gridy = 0;
+        triplesConstraints.weightx = 0.5;
+        triplesConstraints.weighty = 0.5;
+        centerPanel.add(new JScrollPane(triples), triplesConstraints);
+
+        quadruples = new JTable(new MyTableModel(quadruplesTitle));
+        GridBagConstraints quadruplesConstraints = new GridBagConstraints();
+        quadruplesConstraints.fill = GridBagConstraints.BOTH;
+        quadruplesConstraints.gridx = 0;
+        quadruplesConstraints.gridy = 1;
+        quadruplesConstraints.weightx = 0.5;
+        quadruplesConstraints.gridwidth = 2;
+        quadruplesConstraints.weighty = 0.5;
+        centerPanel.add(new JScrollPane(quadruples), quadruplesConstraints);
+    }
+
+    class MyTableModel extends AbstractTableModel {
+        private String[] columnNames;
+        private String[][] data = {};
+
+        public MyTableModel(String[] columnNames) {
+            this.columnNames = columnNames;
+        }
+
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        public int getRowCount() {
+            return data.length;
+        }
+
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+
+        /*
+         * Don't need to implement this method unless your table's
+         * data can change.
+         */
+        public void setValueAt(String value, int row, int col) {
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
     }
 
 }

@@ -154,7 +154,7 @@ public class State {
         return statesTransition;
     }
     /**
-     * Reset label after each NFA or DFA is generated!
+     * Reset label after each NFA is generated!
      */
     public static void resetLabelCount(){
         labelCount = 65;

@@ -37,8 +37,11 @@ class AutomataWindow extends JPanel {
     static void setUpNfaDfa(Fragment nfa, DFA dfa) {
         nfaWindow.getChartPanel().removeAll();
         nfaWindow.getChartPanel().add(new AppGraph().init(nfa));
+        nfaWindow.getChartPanel().revalidate();
         dfaWindow.getChartPanel().removeAll();
         dfaWindow.getChartPanel().add(new AppGraph().init(dfa));
+        dfaWindow.getChartPanel().revalidate();
+
     }
 
     static void setUpStrings(String upStrings) {

@@ -1,9 +1,7 @@
 package com.kaba.helper;
 
-import java.util.EmptyStackException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Class for Regular Expression Methods: Created by Kaba Yusuf on 9/30/2016.
@@ -50,6 +48,15 @@ public class Regex {
         Queue<Character> postFix = new LinkedList<>();
         input = input.replaceAll("\\s", "");
 
+        Pattern merged = Pattern.compile("(^[(]?[abcde][.+*|?()])([.|()]?)([abcde][.+*|?()][*+?.|()]*)*([abcde][*+?.|)]?[*+?.|)]?)$");
+        if(generateInputSymbol(input).length > 5) {
+            throw new IllegalArgumentException("You entered an invalid regular expression: Too much input alphabets");
+        }
+
+        if(!merged.matcher(input).matches()) {
+            throw new IllegalArgumentException("You entered an invalid regular expression: Invalid regular expression");
+        }
+
         for (char token: input.toCharArray()) {
             if(isOperator(token) && !isUnary(token)){
                 while(!stack.isEmpty() && ((isLeftAssociative(token) && precedence(token) <= precedence(stack.peek())) || (!isLeftAssociative(token) && precedence(token) < precedence(stack.peek()))) ){
@@ -89,6 +96,25 @@ public class Regex {
         return postFix;
     }
 
+    /**
+     * Returns a the count of unique characters in an input
+     * Reference: http://stackoverflow.com/a/22597587/6808335
+     */
+    private static char[] generateInputSymbol(String input) {
+        ArrayList<Character> inputAlphabet = new ArrayList<>();
+        int[] inputChar = input.chars().distinct().toArray();
+        for(int singleInput : inputChar){
+            if(!isOperator((char) singleInput)) {
+                inputAlphabet.add((char) singleInput);
+            }
+        }
+        char[] alphabets = new char[inputAlphabet.size()];
+        for(int i = 0; i < inputAlphabet.size(); i++) {
+            alphabets[i] = inputAlphabet.get(i);
+        }
+        Fragment.setInputSymbol(alphabets);
+        return alphabets;
+    }
 
     private static final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))"; //Reference: http://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
 

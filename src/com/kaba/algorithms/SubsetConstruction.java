@@ -39,7 +39,6 @@ public class SubsetConstruction {
         DFAState start = new DFAState('S', startEClosure);
         generatedDFA = new DFA(start);
         dfaStates.add(start);
-        int loopCount = 0;
         while (!dfaStates.isEmpty()) {
             DFAState current = dfaStates.remove();
             for (char input : Fragment.getInputSymbol()) {
@@ -60,12 +59,8 @@ public class SubsetConstruction {
                 }
                 current.updateTransitions(input, newState.getLabel());
             }
-            loopCount++;
-            if(loopCount == 15){
-                break;
-            }
         }
-        State.resetLabelCount();
+        DFAState.resetLabelCount();
         return generatedDFA;
     }
 

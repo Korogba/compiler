@@ -8,7 +8,9 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +41,53 @@ public class AppGraph {
     }
 
     private void initGraph() {
+        String styleSheet = "graph {" +
+                "fill-color: #FFFFFF;" +
+                "}" +
+                "edge {" +
+                "size: 2px;" +
+                "fill-mode: dyn-plain;" +
+                "}" +
+                "edge.caseA {" +
+                "fill-color: #EC7063;" +
+                "}" +
+                "edge.caseB {" +
+                "fill-color: #239B56;" +
+                "}" +
+                "edge.caseC {" +
+                "fill-color: #3498DB;" +
+                "}" +
+                "edge.caseD {" +
+                "fill-color: #7D3C98;" +
+                "}" +
+                "edge.caseE {" +
+                "fill-color: #B7950B;" +
+                "}" +
+                "edge.default {" +
+                "fill-color: #17202A;" +
+                "}" +
+                "node {" +
+                "size: 25px;" +
+                "fill-mode: dyn-plain;" +
+                "fill-color: #EEEEEE, #f2ede4, #95b205;" +
+                "text-size: 16px;" +
+                "}" +
+                "node.start {" +
+                "fill-color: #e1f9f2;" +
+                "stroke-mode: plain;" +
+                "stroke-color: #555;" +
+                "stroke-width: 3px;" +
+                "}" +
+                "node.final {" +
+                "fill-color: #e1f9f2;" +
+                "stroke-mode: plain;" +
+                "stroke-color: #855;" +
+                "stroke-width: 3px;" +
+                "shape: rounded-box;" +
+                "}" +
+                "node:clicked {" +
+                "fill-color: #c7e475;" +
+                "}";
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.setAutoCreate(true);
         graph.setStrict(false);
@@ -47,7 +96,7 @@ public class AppGraph {
     }
 
     private ViewPanel attachViewPanel() {
-        Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
         return viewer.addDefaultView(false);
     }
@@ -120,53 +169,5 @@ public class AppGraph {
         }
         return classType;
     }
-
-    private final String styleSheet = "graph {" +
-            "fill-color: #FFFFFF;" +
-            "}" +
-            "edge {" +
-            "size: 2px;" +
-            "fill-mode: dyn-plain;" +
-            "}" +
-            "edge.caseA {" +
-            "fill-color: #EC7063;" +
-            "}" +
-            "edge.caseB {" +
-            "fill-color: #239B56;" +
-            "}" +
-            "edge.caseC {" +
-            "fill-color: #3498DB;" +
-            "}" +
-            "edge.caseD {" +
-            "fill-color: #7D3C98;" +
-            "}" +
-            "edge.caseE {" +
-            "fill-color: #B7950B;" +
-            "}" +
-            "edge.default {" +
-            "fill-color: #17202A;" +
-            "}" +
-            "node {" +
-            "size: 25px;" +
-            "fill-mode: dyn-plain;" +
-            "fill-color: #EEEEEE, #f2ede4, #95b205;" +
-            "text-size: 16px;" +
-            "}" +
-            "node.start {" +
-            "fill-color: #e1f9f2;" +
-            "stroke-mode: plain;" +
-            "stroke-color: #555;" +
-            "stroke-width: 3px;" +
-            "}" +
-            "node.final {" +
-            "fill-color: #e1f9f2;" +
-            "stroke-mode: plain;" +
-            "stroke-color: #855;" +
-            "stroke-width: 3px;" +
-            "shape: rounded-box;" +
-            "}" +
-            "node:clicked {" +
-            "fill-color: #c7e475;" +
-            "}";
 
 }

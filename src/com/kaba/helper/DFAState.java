@@ -99,4 +99,11 @@ public class DFAState {
             return stringBuilder.toString();
         }
     }
+
+    /**
+     * Reset label after each DFA is generated!
+     */
+    public static void resetLabelCount() {
+        stateLabel = 65;
+    }
 }
