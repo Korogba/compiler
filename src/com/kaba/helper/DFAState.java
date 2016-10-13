@@ -33,6 +33,10 @@ public class DFAState {
         return label;
     }
 
+    public HashMap<Character, List<Character>> getTransitions() {
+        return transitions;
+    }
+
     private void setLabel() {
         if(91 <= stateLabel && stateLabel <= 96) {
             stateLabel = 97;

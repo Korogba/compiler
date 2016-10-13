@@ -23,6 +23,14 @@ public class DFA {
         return finalStates;
     }
 
+    public Set<DFAState> getStates() {
+        return states;
+    }
+
+    public DFAState getStartState() {
+        return startState;
+    }
+
     /**
      * Returns true of the DFA already contains this list of states as a state.
      */

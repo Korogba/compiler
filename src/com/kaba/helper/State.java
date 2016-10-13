@@ -36,7 +36,7 @@ public class State {
         labelCount++;
     }
 
-    private HashMap<Character, List<State>> getTransitions() {
+    HashMap<Character, List<State>> getTransitions() {
         return transitions;
     }
 

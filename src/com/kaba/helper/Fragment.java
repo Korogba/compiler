@@ -32,7 +32,7 @@ public class Fragment {
         this.finalState = finalState;
     }
 
-    private Set<State> getStates() {
+    Set<State> getStates() {
         return states;
     }
 
