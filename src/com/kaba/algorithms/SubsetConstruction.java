@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class SubsetConstruction {
     /**
-     * References: http://homepages.gold.ac.uk/nikolaev/
+     * References (Algorithm): http://homepages.gold.ac.uk/nikolaev/
      * Input: NFA Fragment
      * Output: DFA Fragment
      * Initialize: Let ε-closure (s0) be the only state in DStates (of the DFA)
@@ -64,6 +64,9 @@ public class SubsetConstruction {
         return generatedDFA;
     }
 
+    /**
+     * Return list of states that can be transitioned to from the current list via char input
+     */
     private static List<State> move(List<State> current, char input) {
         List<State> moveViaInput = new LinkedList<>();
         for(State state : current){

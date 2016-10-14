@@ -2,14 +2,10 @@ package com.kaba.ui;
 
 /**
  * Created by Yusuf on 10/11/2016
+ * Displays the DFA graph: Additional personalization can be done here
  */
-public class DFAWindow extends GraphWindow {
-    public DFAWindow(AppWindow appWindow) {
+class DFAWindow extends GraphWindow {
+    DFAWindow(AppWindow appWindow) {
         super(appWindow);
-    }
-
-    @Override
-    protected String returnName() {
-        return "Deterministic Finite Automata";
     }
 }

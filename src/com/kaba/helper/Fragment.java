@@ -54,6 +54,18 @@ public class Fragment {
     }
 
     /**
+     * Return State from Fragment whose label is char label or return null
+     */
+    State returnStateFromCharacter(char label) {
+        for(State state : states) {
+            if(state.getLabel() == label){
+                return state;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Private method to return a properly formatted string for the set of states to be used in the toString method
      */
     private String printStates(){
@@ -191,7 +203,7 @@ public class Fragment {
     /**
      * Returns the input alphabets accepted by the language
      */
-    public static void setInputSymbol(char[] setAlphabet) {
+    static void setInputSymbol(char[] setAlphabet) {
         inputAlphabet = setAlphabet;
     }
 }

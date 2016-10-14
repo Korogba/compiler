@@ -31,6 +31,15 @@ public class DFA {
         return startState;
     }
 
+    public DFAState returnStateFromCharacter(char label) {
+        for(DFAState state : states) {
+            if(state.getLabel() == label){
+                return state;
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns true of the DFA already contains this list of states as a state.
      */

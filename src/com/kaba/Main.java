@@ -1,17 +1,9 @@
 package com.kaba;
 
-import com.kaba.algorithms.SubsetConstruction;
-import com.kaba.algorithms.Thompson;
-import com.kaba.algorithms.ThreeAddressCode;
-import com.kaba.helper.BinaryTree;
-import com.kaba.helper.Fragment;
-import com.kaba.helper.Regex;
 import com.kaba.ui.AppWindow;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * Main method class created by Kaba Yusuf on 9/30/2016.

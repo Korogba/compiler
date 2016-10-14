@@ -10,16 +10,16 @@ import java.awt.event.KeyEvent;
 
 /**
  * Created by Yusuf on 10/11/2016
+ * Panel for the two automata graphs: NFA & DFA
  */
 class AutomataWindow extends JPanel {
 
-    private JTabbedPane chartPane;
     private static DFAWindow dfaWindow;
     private static NFAWindow nfaWindow;
 
     AutomataWindow(AppWindow appWindow) {
         super(new GridLayout(0, 1));
-        chartPane = new JTabbedPane(JTabbedPane.LEFT);
+        JTabbedPane chartPane = new JTabbedPane(JTabbedPane.LEFT);
 
         nfaWindow = new NFAWindow(appWindow);
         chartPane.addTab("Non-Deterministic Finite Automata", nfaWindow);
@@ -29,11 +29,12 @@ class AutomataWindow extends JPanel {
         chartPane.addTab("Deterministic Finite Automata", dfaWindow);
         chartPane.setMnemonicAt(1, KeyEvent.VK_2);
 
-        chartPane.addChangeListener(changeEvent -> GraphWindow.setAppropriateTitleAndStatus((GraphWindow)chartPane.getSelectedComponent(), "Finite Automata"));
-
         add(chartPane);
     }
 
+    /**
+     * Clear the panels for both NFA & DFA and replace with the latest nfa & dfa
+     */
     static void setUpNfaDfa(Fragment nfa, DFA dfa) {
         nfaWindow.getChartPanel().removeAll();
         nfaWindow.getChartPanel().add(new AppGraph().init(nfa));
@@ -44,6 +45,9 @@ class AutomataWindow extends JPanel {
 
     }
 
+    /**
+     * Set the input text area of both NFA and DFA windows to the regexp that just executed
+     */
     static void setUpStrings(String upStrings) {
         nfaWindow.getInputArea().setText(upStrings);
         dfaWindow.getInputArea().setText(upStrings);

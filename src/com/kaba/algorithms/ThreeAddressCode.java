@@ -9,44 +9,44 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Class that contains the algorithm to convert an expression to three address code: Created by Yusuf on 10/3/2016.
+ * Class that contains the algorithm to convert an expression to different variations of three address code: Created by Yusuf on 10/3/2016.
  */
 public class ThreeAddressCode {
-    private static Stack<String> threeAddress = new Stack<>();
-    private static Stack<Quadruples> quadruples = new Stack<>();
-    private static Stack<Triples> triples = new Stack<>();
-    private static int labelCount = 0;
-    private static Stack<String> statements = new Stack<>();
+    private Stack<String> threeAddress = new Stack<>();
+    private Stack<Quadruples> quadruples = new Stack<>();
+    private Stack<Triples> triples = new Stack<>();
+    private int labelCount = 0;
+    private Stack<String> statements = new Stack<>();
 
-    public static List<String> getThreeAddress(BinaryTree<String> statement) {
+    public List<String> getThreeAddress(BinaryTree<String> statement) {
         threeAddressFromBinaryTree(statement);
         return threeAddress;
     }
 
-    public static Stack<Quadruples> getQuadruples(BinaryTree<String> statement) {
+    public List<Quadruples> getQuadruples(BinaryTree<String> statement) {
         quadruplesFromBinaryTree(statement);
         return quadruples;
     }
 
-    public static Stack<Triples> getTriples(BinaryTree<String> statement) {
+    public List<Triples> getTriples(BinaryTree<String> statement) {
         triplesFromBinaryTree(statement);
         return triples;
     }
 
-    public static Stack<String> getStatements() {
+    public Stack<String> getStatements() {
         return statements;
     }
 
     /**
-     *  Return an equivalent NFA fragment of a postfix expression
-     *  Inputs: Queue that contains postfix expression
-     *  Output: NFA fragment
-     *  Algorithm:
-     *  Read a token.
+     * Return an equivalent NFA fragment of a postfix expression
+     * Inputs: Queue that contains postfix expression
+     * Output: NFA fragment
+     * Algorithm:
+     * Read a token.
      *
-     *  Exit
+     * Exit
      */
-    public static List<BinaryTree<String>> generateThreeAddressCode(String statements) throws IllegalArgumentException {
+    public List<BinaryTree<String>> generateThreeAddressCode(String statements) throws IllegalArgumentException {
         if(!Pattern.matches(".*;$", statements)){
             throw new IllegalArgumentException("Please enter a string terminated with ';' ");
         }
@@ -56,7 +56,7 @@ public class ThreeAddressCode {
         for(String statement: splitStatements) {
             Queue<String> tokens = Regex.infixToPostfixString(statement);
             addressCodes.add(postfixToBinaryTree(tokens));
-            ThreeAddressCode.statements.push(statement);
+            getStatements().push(statement);
         }
         return addressCodes;
     }
@@ -108,12 +108,20 @@ public class ThreeAddressCode {
         return workingContainer.pop();
     }
 
+    /**
+     * Return true if token is actually a unary operation with a either a +/- and any operand
+     */
     private static boolean isMergedUnary(String token) {
         Pattern merged = Pattern.compile("[+|-].*");
         return merged.matcher(token).matches();
     }
 
-    private static String threeAddressFromBinaryTree(BinaryTree<String> binaryTree){
+    /**
+     * Return three address code from a BinaryTree (com.kaba.helper.BinaryTree)
+     * Uses recursion to traverse/visit each node in the binary tree
+     * Take not that internal nodes are operators and leaf nodes are operands
+     */
+    private String threeAddressFromBinaryTree(BinaryTree<String> binaryTree){
         if(binaryTree == null){
             return "";
         }
@@ -145,7 +153,12 @@ public class ThreeAddressCode {
         }
     }
 
-    private static String quadruplesFromBinaryTree(BinaryTree<String> binaryTree){
+    /**
+     * Return quadruple representation from a BinaryTree (com.kaba.helper.BinaryTree)
+     * Uses recursion to traverse/visit each node in the binary tree
+     * Take not that internal nodes are operators and leaf nodes are operands
+     */
+    private String quadruplesFromBinaryTree(BinaryTree<String> binaryTree){
         if(binaryTree == null){
             return "";
         }
@@ -154,7 +167,8 @@ public class ThreeAddressCode {
         }
         else {
             if(binaryTree.getElement().equals("=")){
-                Quadruples current = new Quadruples(binaryTree.getElement(), quadruplesFromBinaryTree(binaryTree.getLeft()), quadruplesFromBinaryTree(binaryTree.getRight()));
+                String label = generateLabelNumber();
+                Quadruples current = new Quadruples(quadruplesFromBinaryTree(binaryTree.getRight()), quadruplesFromBinaryTree(binaryTree.getLeft()), binaryTree.getElement(), label);
                 quadruples.push(current);
                 return "";
             }
@@ -167,7 +181,12 @@ public class ThreeAddressCode {
         }
     }
 
-    private static String triplesFromBinaryTree(BinaryTree<String> binaryTree){
+    /**
+     * Return triple representation from a BinaryTree (com.kaba.helper.BinaryTree)
+     * Uses recursion to traverse/visit each node in the binary tree
+     * Take not that internal nodes are operators and leaf nodes are operands
+     */
+    private String triplesFromBinaryTree(BinaryTree<String> binaryTree){
         if(binaryTree == null){
             return "";
         }
@@ -176,21 +195,24 @@ public class ThreeAddressCode {
         }
         else {
             if(binaryTree.getElement().equals("=")){
-                generateLabelNumber();
-                Triples current = new Triples(labelCount, binaryTree.getElement(), triplesFromBinaryTree(binaryTree.getLeft()), triplesFromBinaryTree(binaryTree.getRight()));
+                String label = generateLabelNumber();
+                Triples current = new Triples(label, binaryTree.getElement(), triplesFromBinaryTree(binaryTree.getLeft()), triplesFromBinaryTree(binaryTree.getRight()));
                 triples.push(current);
                 return "";
             }
             else {
-                generateLabelNumber();
-                Triples current = new Triples(labelCount, binaryTree.getElement(), triplesFromBinaryTree(binaryTree.getLeft()), triplesFromBinaryTree(binaryTree.getRight()));
+                String label = generateLabelNumber();
+                Triples current = new Triples(label, binaryTree.getElement(), triplesFromBinaryTree(binaryTree.getLeft()), triplesFromBinaryTree(binaryTree.getRight()));
                 triples.push(current);
-                return labelCount + "";
+                return label;
             }
         }
     }
 
-    private static String generateLabelNumber() {
+    /**
+     * Generate fancy? label name for Triple address code
+     */
+    private String generateLabelNumber() {
         labelCount++;
         return "t" + labelCount;
     }

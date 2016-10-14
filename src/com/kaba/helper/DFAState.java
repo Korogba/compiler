@@ -33,7 +33,7 @@ public class DFAState {
         return label;
     }
 
-    public HashMap<Character, List<Character>> getTransitions() {
+    HashMap<Character, List<Character>> getTransitions() {
         return transitions;
     }
 

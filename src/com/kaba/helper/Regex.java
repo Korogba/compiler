@@ -50,7 +50,7 @@ public class Regex {
 
         Pattern merged = Pattern.compile("(^[(]?[abcde][.+*|?()])([.|()]?)([abcde][.+*|?()][*+?.|()]*)*([abcde][*+?.|)]?[*+?.|)]?)$");
         if(generateInputSymbol(input).length > 5) {
-            throw new IllegalArgumentException("You entered an invalid regular expression: Too much input alphabets");
+            throw new IllegalArgumentException("You entered an invalid regular expression: Too many input alphabets");
         }
 
         if(!merged.matcher(input).matches()) {
@@ -104,7 +104,7 @@ public class Regex {
         ArrayList<Character> inputAlphabet = new ArrayList<>();
         int[] inputChar = input.chars().distinct().toArray();
         for(int singleInput : inputChar){
-            if(!isOperator((char) singleInput)) {
+            if(!isOperator((char) singleInput) && ((char) singleInput) != ')' && (char) singleInput != '(') {
                 inputAlphabet.add((char) singleInput);
             }
         }

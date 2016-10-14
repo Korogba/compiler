@@ -16,14 +16,16 @@ import java.util.EmptyStackException;
 
 /**
  * Created by Yusuf on 10/11/2016
+ * Abstract class that contains the methods to display an automata
+ * Implemented by DFAWindow and NFAWindow
  */
-public abstract class GraphWindow extends JPanel {
+abstract class GraphWindow extends JPanel {
     private JTextField inputArea;
     private JPanel chartPanel;
     private boolean firstTimeClicked = true;
     private AppWindow appWindow;
 
-    public GraphWindow(AppWindow appWindow) {
+    GraphWindow(AppWindow appWindow) {
         this.appWindow = appWindow;
         /*
         * Set the layout clause
@@ -92,12 +94,9 @@ public abstract class GraphWindow extends JPanel {
         firstTimeClicked = flag;
     }
 
-    protected abstract String returnName();
-
-    public static void setAppropriateTitleAndStatus(GraphWindow selectedComponent, String staticName) {
-        String statusBar = staticName + " " + selectedComponent.returnName();
-    }
-
+    /**
+     * Inner ActionHandler class that handles the creation and displaying of NFA and DFA
+     */
     private class RunHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -109,6 +108,11 @@ public abstract class GraphWindow extends JPanel {
                 String regex = inputArea.getText();
                 Fragment NFA = Thompson.postfixToNFA(Regex.infixToPostfix(regex));
                 DFA dfa = SubsetConstruction.subsetConstruction(NFA);
+                System.out.println("GENERATED NFA:\n" + NFA);
+                System.out.println("==============================================================================================================================================");
+                System.out.println("GENERATED DFA:\n");
+                System.out.println("==============================================================================================================================================");
+                System.out.println(dfa);
                 AutomataWindow.setUpNfaDfa(NFA, dfa);
                 AutomataWindow.setUpStrings(regex);
             } catch (IllegalArgumentException e) {

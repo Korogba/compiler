@@ -23,37 +23,21 @@ public class Quadruples {
         this.operandTwo = "";
     }
 
-/*    public String getOperandOne() {
+    public String getOperandOne() {
         return operandOne;
-    }
-
-    public void setOperandOne(String operandOne) {
-        this.operandOne = operandOne;
     }
 
     public String getOperandTwo() {
         return operandTwo;
     }
 
-    public void setOperandTwo(String operandTwo) {
-        this.operandTwo = operandTwo;
-    }
-
     public String getOperator() {
         return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
     }
 
     public String getResult() {
         return result;
     }
-
-    public void setResult(String result) {
-        this.result = result;
-    }*/
 
     @Override
     public String toString() {
